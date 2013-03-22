@@ -1,7 +1,15 @@
-<h1>Welcome, <%= @user.email %></h1>
-<p>Here are your albums!</p>
+<h1>The Profile of <%= @user.email %></h1>
+<p>Here are their albums!</p>
+<% if current_user.id == @user.id %>
+  <a href="/users/<%= current_user.id %>/new_album">Create new album</a>
+<% end %>
+
 <% @albums.each do |album| %>
-  <p><a href="/albums/<%= album.id %>"><img src="<%= album.photos.last.photo_string %>"></a></p>
-  <p><%= album.title %></p>
-  <p><%= album.description %></p>
+  <% if album.photos.length > 0 %>
+    <p><a href="/albums/<%= album.id %>"><img src="<%= album.photos.first.photo_string %>"></a></p>
+    <p><%= album.title %></p>
+    <p><%= album.description %></p>
+  <% else %>
+    <p><a href="/albums/<%= album.id %>">Click here to add photos to album <%= album.title %></a></p>
+    <% end%>
 <% end %>

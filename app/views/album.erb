@@ -1,5 +1,8 @@
 <h1>Your Album</h1>
-<p><a href="/album/<%= @album.id %>/upload">Upload new photo</a></p>
+<p><% if current_user %>
+  <a href="/albums/<%= @album.id %>/upload">Upload new photo</a>
+  <% end %></p>
+  
 <p>Here are your photos from: <%= @album.title %></p>
 <% @photos.each do |photo| %>
 <p><a href="/albums/<%= @album.id %>/<%= photo.id %>"><img src="<%= photo.photo_string %>"></a></p>

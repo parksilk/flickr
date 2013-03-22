@@ -7,9 +7,25 @@ end
 get '/users/:user_id' do
   @user = User.find(params[:user_id])
   @albums = Album.where('user_id = ?', params[:user_id])
-  @photos = Photo.where('user_id = ?', params[:user_id])
 
   erb :profile
+end
+
+# IMAGE UPLOAD
+
+get '/albums/:album_id/upload' do
+  erb :uploader
+end      
+    
+post '/albums/:album_id/upload' do 
+  p = Photo.new
+  p.title = params[:title]
+  p.description = params[:description]
+  p.album_id = params[:album_id]
+  p.photo_string = params['myfile']
+  p.save!
+  
+  redirect back
 end
 
 # ALBUMS
@@ -23,7 +39,6 @@ end
 
 
 get '/albums/:album_id/:photo_id' do
-  # Show a single photo
   @photo = Photo.find(params[:photo_id])
 
   erb :photo
@@ -36,21 +51,20 @@ get '/albums/:album_id/carousel' do
   erb :carousel
 end
 
-# IMAGE UPLOAD
+get '/users/:user_id/new_album' do
+  if session[:id] == params[:user_id].to_i
+    @user = User.find(params[:user_id])
+    erb :new_album
+  else 
+    redirect '/'
+  end
+end
 
-get '/album/:album_id/upload' do
-  erb :uploader
-end      
-    
-post '/album/:album_id/upload' do 
-  p = Photo.new
-  p.title = params[:title]
-  p.description = params[:description]
-  p.album_id = params[:album_id]
-  p.photo_string = params['myfile']
-  p.save!
-  
-  redirect back
+post '/users/:user_id/new_album' do
+  puts "&" * 100
+  @user = params[:user_id]
+  @album = Album.create(title: params[:title], description: params[:description], user_id: @user)
+  redirect "users/#{@user}"
 end
 
 # SIGN UP
@@ -85,10 +99,17 @@ post '/signin' do
   @user = User.find_by_email(params[:user]["email"])
   if User.authenticate(params[:user])
      session[:id] = @user.id
-     erb :profile
+
+     redirect "/users/#{@user.id}"
   else
      @error = "You need a proper (and unique) email and password"
-     erb :login
+     erb :signin
   end
 end
 
+# SIGN OUT
+
+get '/signout' do
+  session.clear
+  redirect '/'
+end
