@@ -39,3 +39,19 @@ post "/album/:album_id/upload" do
   
   redirect back
 end
+
+post "/signup" do
+  puts "!!!!!!! #{params}"
+  @user = User.new(params[:user])
+  puts @user.valid?
+  unless @user.save
+    erb :signup
+  else
+    session[:id] = @user.id
+    redirect "/profile/#{@user.id}"
+  end  
+end
+
+get "/signup" do
+  erb :signup
+end
