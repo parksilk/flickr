@@ -15,6 +15,8 @@ gem 'activerecord'
 
 gem 'rake'
 
+gem 'carrierwave'
+
 group :test do
   gem 'faker'
   gem 'rspec'
