@@ -1,0 +1,7 @@
+<h1>Welcome, <%= @user.email %></h1>
+<p>Here are your albums!</p>
+<% @albums.each do |album| %>
+  <p><a href="/albums/<%= album.id %>"><img src="<%= album.photos.last.photo_string %>"></a></p>
+  <p><%= album.title %></p>
+  <p><%= album.description %></p>
+<% end %>

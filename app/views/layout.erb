@@ -7,10 +7,27 @@
     See: http://necolas.github.com/normalize.css/
   -->
   <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/main.css">
 
   <title></title>
 </head>
 <body>
-  <%= yield %>
+
+  <nav>
+    <span id="logo">
+      <ul>
+      <% if current_user %>
+        <li>Your Profile</li>
+        <li>Signout</li>
+      <% else %>
+        <li>Sign In</li>
+        <li>Sign Up</li>
+      <% end %>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <%= yield %>
+  </div>
 </body>
 </html>
